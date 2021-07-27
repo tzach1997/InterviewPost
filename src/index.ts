@@ -31,14 +31,16 @@ app.post('/posts', (req, res) => {
 })
 
 app.get('/posts', (req, res) => {
-    const limit = req.query.limit;
-    const start = req.query.start;
-    if(!limit){
+
+    if(!req.query.limit){
         res.send('request must have limit');
-    } else if(!start){
+    } else if(!req.query.start){
         res.send('request must have start');
     } else {
-        PostModel.find({ skip: start, limit}).then(posts=>{
+        const limit:number = Number(req.query.limit);
+        const start:number = Number(req.query.start);
+
+        PostModel.find().skip(start).limit(limit).then(posts=>{
             res.send(JSON.stringify(posts));
         },e =>{
             logger.log('error',JSON.stringify(e));
