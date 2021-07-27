@@ -23,6 +23,7 @@
   "homepage": "https://github.com/tzach1997/InterviewPost#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "mongoose": "^5.13.3",
     "winston": "^3.3.3"
   },
   "devDependencies": {
