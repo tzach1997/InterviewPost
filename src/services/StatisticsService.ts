@@ -5,7 +5,7 @@ function addTime(runnigTime:any,route:any){
     RouteRequestModel.create({route,runTime:runnigTime});
 }
 
-var pipeline = [
+const pipeline = [
     {
         "$group": {
             "_id": {
@@ -15,7 +15,7 @@ var pipeline = [
                 "$avg": "$runTime"
             }
         }
-    }, 
+    },
     {
         "$project": {
             "route": "$_id.route",
