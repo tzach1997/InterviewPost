@@ -82,7 +82,6 @@ app.get('/statistics/runtimes', (req, res) => {
         logger.log('error',JSON.stringify(e));
         res.send('faild get runtimes from db');
     });
-    res.send('Get request for runtimes')
 })
 
 // start the express server
