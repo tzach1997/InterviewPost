@@ -1,2 +1,33 @@
-import { PostModel } from "../post/post.model";
+import { RouteRequestModel } from "../route/routeRequest.model";
 import { ResultFunction,ErrorFunction } from "./types";
+
+function addTime(runnigTime:any,route:any){
+    RouteRequestModel.create({route,runTime:runnigTime});
+}
+
+const pipeline = [
+    {
+        "$group": {
+            "_id": {
+                "route": "$route"
+            },
+            "avrageRunTime": {
+                "$avg": "$runTime"
+            }
+        }
+    },
+    {
+        "$project": {
+            "route": "$_id.route",
+            "avrageRunTime": "$avrageRunTime",
+            "_id": 0
+        }
+    }
+];
+
+
+function getAvarage(result:ResultFunction,error:ErrorFunction){
+    RouteRequestModel.aggregate(pipeline).then(result,error);
+}
+
+export {addTime,getAvarage};
