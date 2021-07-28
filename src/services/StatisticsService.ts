@@ -11,7 +11,7 @@ const pipeline = [
             "_id": {
                 "route": "$route"
             },
-            "AVG(runTime)": {
+            "avrageRunTime": {
                 "$avg": "$runTime"
             }
         }
@@ -19,7 +19,7 @@ const pipeline = [
     {
         "$project": {
             "route": "$_id.route",
-            "AVG(runTime)": "$AVG(runTime)",
+            "avrageRunTime": "$avrageRunTime",
             "_id": 0
         }
     }
