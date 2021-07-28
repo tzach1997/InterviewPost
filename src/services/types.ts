@@ -1,4 +1,4 @@
-type ResultFunction = (a: any) => void;
-type ErrorFunction = (a: any) => void;
+type ResultFunction = (result: any) => void;
+type ErrorFunction = (error: any) => void;
 
 export type {ResultFunction,ErrorFunction};

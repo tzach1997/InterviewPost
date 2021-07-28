@@ -3,6 +3,8 @@ import logger from "./logger/winstonLogger";
 import {connect} from "./database/database"
 import findTopCreators from "./services/TopCreators";
 import {createPost,findPosts,numberPosts} from "./services/PostService";
+import { addTime, getAvarage } from "./services/StatisticsService";
+import { hrTimeToNano } from "./util";
 const app = express();
 const port = 8080; // default port to listen
 
@@ -12,6 +14,7 @@ app.use(express.json())
 
 app.post('/posts', (req, res) => {
     const post = req.body;
+    const startTime = process.hrtime();
     if(!post){
         res.send('request must body');
     } else if(!post.title){
@@ -23,6 +26,8 @@ app.post('/posts', (req, res) => {
     } else {
         createPost(post,()=>{
             res.send('Post created sucssesfuly');
+            const diff = process.hrtime(startTime);
+            addTime(hrTimeToNano(diff), 'savePost')
         },e =>{
             logger.log('error',JSON.stringify(e));
             res.send('Post creation failed');
@@ -31,6 +36,7 @@ app.post('/posts', (req, res) => {
 })
 
 app.get('/posts', (req, res) => {
+    const startTime = process.hrtime();
 
     if(!req.query.limit){
         res.send('request must have limit');
@@ -42,6 +48,9 @@ app.get('/posts', (req, res) => {
 
         findPosts(start,limit,posts=>{
             res.send(JSON.stringify(posts));
+
+            const diff = process.hrtime(startTime);
+            addTime(hrTimeToNano(diff), 'findPosts')
         },e =>{
             logger.log('error',JSON.stringify(e));
             res.send('faild find posts');
@@ -67,6 +76,12 @@ app.get('/statistics/topcreators', (req, res) => {
 })
 
 app.get('/statistics/runtimes', (req, res) => {
+    getAvarage(requestAvarages=>{
+        res.send(JSON.stringify(requestAvarages));
+    },e =>{
+        logger.log('error',JSON.stringify(e));
+        res.send('faild get runtimes from db');
+    });
     res.send('Get request for runtimes')
 })
 
